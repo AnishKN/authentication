@@ -1,0 +1,1 @@
+mongodb+srv://admin:admin@cluster0.sufup.mongodb.net/
