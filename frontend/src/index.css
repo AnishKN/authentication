@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.react-responsive-modal-closeButton{
+    display: none !important;
+}

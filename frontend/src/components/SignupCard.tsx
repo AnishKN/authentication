@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
@@ -10,6 +10,8 @@ import { BiSolidShow } from "react-icons/bi";
 import { BiSolidHide } from "react-icons/bi";
 
 const SignUpCard = () => {
+  const navigate = useNavigate();
+  const [ disabledBtn, setDisabledBtn ] = useState(false);
   const [showPass, setShowPass] = useState(false);
   const [showPass2, setShowPass2] = useState(false);
   const [open, setOpen] = useState(false);
@@ -35,21 +37,28 @@ const SignUpCard = () => {
   });
 
   const onSubmit = async (data: any) => {
-    setEmail(data.email);
-    onOpenModal();
-    return;
-
     try {
       if (data.retypePassword !== data.password) {
         toast.error("Passwords do not match!");
         return;
       }
+      setEmail(data.email);
+
+      let url = `${import.meta.env.VITE_BACKEND_URL}user/signup`;
       await axios
-        .post(`${import.meta.env.VITE_BACKEND_URL}user/signup`, data)
+        .request({
+          method: "post",
+          maxBodyLength: Infinity,
+          url: url,
+          headers: {
+            "Content-Type": "application/json",
+          },
+          data: data,
+        })
         .then((response) => {
           let message = response?.data?.message || "Success!!";
           toast.success(message);
-          localStorage.setItem("admin", JSON.stringify(response.data.user));
+          localStorage.setItem("user", JSON.stringify(response.data.user));
           onOpenModal();
         })
         .catch((error) => {
@@ -66,18 +75,21 @@ const SignUpCard = () => {
   };
 
   const handleVerify = () => {
+    setDisabledBtn(true)
     axios
       .post(`${import.meta.env.VITE_BACKEND_URL}user/verify`, { email, otp })
       .then((response) => {
         let message = response?.data?.message || "Success!!";
-        toast.success(message);
         onCloseModal();
+        toast.success(message);
+        navigate("/user/signin")
       })
       .catch((error) => {
         console.log(error);
         let message = error.response?.data?.message || "something went wrong!";
         toast.error(message);
       });
+      setDisabledBtn(false)
   };
 
   return (
@@ -221,22 +233,34 @@ const SignUpCard = () => {
       </form>
 
       <Modal open={open} onClose={onCloseModal} center>
-        <h2 className="text-xl font-bold text-gray-900">Enter OTP</h2>
-        <div className="p-8 flex flex-col justify-center items-center">
-          <p>
+        <h2 className="text-xl font-bold text-gray-900 text-center sm:text-2xl">
+          Enter OTP
+        </h2>
+        <div className="p-4 sm:p-8 flex flex-col justify-center items-center">
+          <p className="text-center text-sm sm:text-base">
             An OTP has been sent to{" "}
-            <span className="text-purple-800">{email}</span>.Please enter and
+            <span className="text-purple-800">{email}</span>. Please enter and
             verify below!
           </p>
           <OtpInput
             value={otp}
             onChange={setOtp}
-            numInputs={6}
-            renderSeparator={<span> - </span>}
-            renderInput={(props) => <input {...props} />}
-            containerStyle={{ padding: "60px" }}
+            numInputs={4}
+            renderSeparator={<span className="hidden sm:inline"> - </span>} // Hide separator on mobile
+            renderInput={(props) => (
+              <input
+                {...props}
+                className="border border-gray-300 rounded-lg w-4 h-4 text-lg focus:outline-none focus:border-purple-500"
+              />
+            )}
+            containerStyle={{
+              display: "flex",
+              justifyContent: "center",
+              padding: "10px",
+              flexWrap: "wrap", // Allow inputs to wrap on small screens
+            }}
             inputStyle={{
-              width: "50px",
+              width: "50px", // Width of input remains the same
               height: "50px",
               fontSize: "20px",
               border: "1px solid #ccc",
@@ -245,7 +269,7 @@ const SignUpCard = () => {
             }}
           />
           <button
-            className="bg-purple-400 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-lg w-28"
+            className="bg-purple-400 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-lg w-full sm:w-28 mt-4"
             onClick={handleVerify}
           >
             Verify

@@ -1,11 +1,14 @@
 import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema({
-  firstName: { type: String, required: true },
-  lastName: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  contactMode: { type: String, required: true },
-});
+  firstName: String,
+  lastName: String,
+  email: { type: String, unique: true, required: true },
+  password: String,
+  contactMode: String,
+  otp: String, // Store OTP for verification
+  otpVerified: { type: Boolean, default: false }, // Whether OTP is verified
+}, { timestamps: true });
 
-export default mongoose.model('User', userSchema);
+const User = mongoose.model('User', userSchema);
+export default User;

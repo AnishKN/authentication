@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
@@ -7,6 +7,7 @@ import { BiSolidShow } from "react-icons/bi";
 import { BiSolidHide } from "react-icons/bi";
 
 const SignInCard = () => {
+  const navigate = useNavigate();
   const [show, setShow] = useState(false);
   const {
     register,
@@ -27,11 +28,13 @@ const SignInCard = () => {
   const onSubmit = async (data: any) => {
     try {
       await axios
-        .post(`${import.meta.env.VITE_BACKEND_URL}user/signup`, data)
+        .post(`${import.meta.env.VITE_BACKEND_URL}user/signin`, data)
         .then((response) => {
           let message = response?.data?.message || "Success!!";
           toast.success(message);
-          localStorage.setItem("admin", JSON.stringify(response.data.user));
+          localStorage.setItem("token", JSON.stringify(response.data.token));
+          localStorage.setItem("user", JSON.stringify(response.data.user));
+          navigate("/user/dashboard");
         })
         .catch((error) => {
           console.log(error);
