@@ -1,5 +1,6 @@
 // @ts-ignore
-import SignUpCard from "../components/SignUpCard.tsx";
+import React from "react";
+import SignUpCard from "../components/SignUpCard";
 
 function SignUp() {
   return (

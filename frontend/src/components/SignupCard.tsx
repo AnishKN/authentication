@@ -8,6 +8,7 @@ import { useState } from "react";
 import OtpInput from "react-otp-input";
 import { BiSolidShow } from "react-icons/bi";
 import { BiSolidHide } from "react-icons/bi";
+import React from "react";
 
 const SignUpCard = () => {
   const navigate = useNavigate();
