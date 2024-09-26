@@ -27,8 +27,17 @@ const SignInCard = () => {
 
   const onSubmit = async (data: any) => {
     try {
+      let url = `${import.meta.env.VITE_BACKEND_URL}user/signin`;
       await axios
-        .post(`${import.meta.env.VITE_BACKEND_URL}user/signin`, data)
+        .request({
+          method: "post",
+          maxBodyLength: Infinity,
+          url: url,
+          headers: {
+            "Content-Type": "application/json",
+          },
+          data: data,
+        })
         .then((response) => {
           let message = response?.data?.message || "Success!!";
           toast.success(message);
