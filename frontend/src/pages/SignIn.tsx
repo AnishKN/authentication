@@ -1,4 +1,4 @@
-import SignInCard from "../components/SignInCard";
+import SignInCard from "../components/SignInCard.tsx";
 
 function SignIn() {
   return (
