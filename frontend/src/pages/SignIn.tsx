@@ -1,6 +1,6 @@
 // @ts-ignore
 import React from "react";
-import SignInCard from "../components/SignInCard";
+import SignInCard from "@components/SignInCard";
 
 function SignIn() {
   return (
