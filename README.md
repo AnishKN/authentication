@@ -14,7 +14,7 @@ This project consists of two main folders: `backend` and `frontend`. The backend
 ### Clone the Repository
 
 ```bash
-git clone [https://github.com/your-username/your-repo-name.git](https://github.com/AnishKN/authentication)
+git clone https://github.com/AnishKN/authentication.git
 cd authentication
 ```
 
