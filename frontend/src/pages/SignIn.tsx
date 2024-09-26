@@ -1,3 +1,4 @@
+// @ts-ignore
 import SignInCard from "../components/SignInCard.tsx";
 
 function SignIn() {
